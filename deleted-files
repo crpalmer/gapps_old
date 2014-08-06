@@ -1,9 +1,18 @@
 # List of files that we need to remove at install time
 
+app/Books.apk
 app/BrowserProviderProxy.apk
+app/Magazines.apk
+app/Maps.apk
+app/Music2.apk
 app/PartnerBookmarksProvider.apk
+app/PlayGames.apk
+app/PlusOne.apk
 app/priv-app/SetupWizard.apk
 app/priv-app/Velvet.apk
 app/Provision.apk
 app/QuickSearchBox.apk
+app/Street.apk
 app/Vending.apk
+app/Videos.apk
+app/YouTube.apk
