@@ -1,11 +1,18 @@
+#!/bin/bash -e
+
+VERSION=4.4.3
+DELETES=`sed "/^[^#]/p;d" < deleted-files | \
+	awk '{printf("delete(\"/system/%s\");\n", $0); }' `
+
+cat <<EOF
 ui_print("***********************************************");
-ui_print("        Google Apps for Android 4.4.3");
+ui_print("        Google Apps for Android $VERSION");
 ui_print("***********************************************");
 
 ui_print("Installing files...");
 run_program("/sbin/busybox", "mount", "/system");
 show_progress(1, 15);
-delete("/system/app/Provision.apk","/system/app/QuickSearchBox.apk","/system/app/priv-app/SetupWizard.apk","/system/app/priv-app/Velvet.apk","/system/app/Vending.apk","/system/app/BrowserProviderProxy.apk","/system/app/PartnerBookmarksProvider.apk");
+$DELETES
 package_extract_dir("system", "/system");
 set_perm(0, 0, 0755, "/system/addon.d/70-gapps.sh");
 package_extract_dir("optional", "/tmp");
@@ -26,3 +33,4 @@ set_metadata_recursive("/system/usr/srec/en-US", "uid", 0, "gid", 0, "dmode", 07
 set_metadata_recursive("/system/vendor/pittpatt", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
 run_program("/sbin/busybox", "umount", "/system");
 ui_print("Installation complete!");
+EOF

@@ -1,0 +1,9 @@
+# List of files that we need to remove at install time
+
+app/BrowserProviderProxy.apk
+app/PartnerBookmarksProvider.apk
+app/priv-app/SetupWizard.apk
+app/priv-app/Velvet.apk
+app/Provision.apk
+app/QuickSearchBox.apk
+app/Vending.apk
