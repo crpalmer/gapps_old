@@ -1,12 +1,19 @@
 #!/bin/bash -e
 
-VERSION=4.4.4
+VERSION="$1"
+
+if [ "$VERSION" = "" ]
+then
+    echo >&2 "usage: minimum-version"
+    exit 1
+fi
+
 DELETES=`sed "/^[^#]/p;d" < deleted-files | \
 	awk '{printf("delete(\"/system/%s\");\n", $0); }' `
 
 cat <<EOF
 ui_print("***********************************************");
-ui_print("        Google Apps for Android $VERSION");
+ui_print("        Google Apps for Android $VERSION+");
 ui_print("***********************************************");
 
 ui_print("Mounting /system...");
