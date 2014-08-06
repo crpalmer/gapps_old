@@ -1,2 +1,4 @@
 META-INF/com/google/android/updater-script
+optional/face/addon.d/71-gapps-faceunlock.sh
+system/addon.d/70-gapps.sh
 gapps-*.zip

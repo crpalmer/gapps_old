@@ -8,7 +8,6 @@
 #
 # *** /IMPORTANT ***
 
-addon.d/70-gapps.sh
 app/Books.apk
 app/GenieWidget.apk
 app/Gmail2.apk

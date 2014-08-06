@@ -8,7 +8,6 @@
 #
 # *** /IMPORTANT ***
 
-face/addon.d/71-gapps-faceunlock.sh
 face/app/FaceLock.apk
 face/lib/libfacelock_jni.so
 face/vendor/pittpatt/models/detection/multi_pose_face_landmark_detectors.7/left_eye-y0-yi45-p0-pi45-r0-ri20.lg_32.bin

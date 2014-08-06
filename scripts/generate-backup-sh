@@ -1,0 +1,47 @@
+#!/bin/bash -e
+
+files=$1
+
+if [ !  -r "$files" ]; then
+    echo >&2 "usage: file-list"
+    exit 1
+fi
+
+cat <<REALEOF
+#!/sbin/sh
+
+. /tmp/backuptool.functions
+
+list_files() {
+cat <<EOF
+`grep '^[^#]' $files`
+EOF
+}
+
+case "\$1" in
+  backup)
+    list_files | while read FILE DUMMY; do
+      backup_file \$S/\$FILE
+    done
+  ;;
+  restore)
+    list_files | while read FILE REPLACEMENT; do
+      R=""
+      [ -n "\$REPLACEMENT" ] && R="\$S/\$REPLACEMENT"
+      [ -f "\$C/\$S/\$FILE" ] && restore_file \$S/\$FILE \$R
+    done
+  ;;
+  pre-backup)
+    # Stub
+  ;;
+  post-backup)
+    # Stub
+  ;;
+  pre-restore)
+    # Stub
+  ;;
+  post-restore)
+    # Stub
+  ;;
+esac
+REALEOF
