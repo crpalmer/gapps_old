@@ -8,6 +8,7 @@
 #
 # *** /IMPORTANT ***
 
+app/GoogleCalendarSyncAdapter.apk
 app/GoogleContactsSyncAdapter.apk
 etc/permissions/com.google.android.maps.xml
 etc/permissions/com.google.android.media.effects.xml
