@@ -34,7 +34,12 @@ $(DEST)/proprietary-files: $(DEST)/proprietary-files.build
 
 $(DEST)/$(UPDATER_SCRIPT): generate-updater-script $(SRC)/deleted-files
 	mkdir -p `dirname $@`
-	./generate-updater-script $(VERSION) $(SRC)/deleted-files >$@
+	( \
+	  if [ -e $(SRC)/banner.updater-script ]; then \
+	    cat $(SRC)/banner.updater-script; \
+	  fi; \
+	  ./generate-updater-script $(VERSION) $(SRC)/deleted-files; \
+	) >$@
 
 $(DEST)/$(BACKUP_SH): $(DEST)/proprietary-files generate-backup-sh
 	mkdir -p `dirname $@`

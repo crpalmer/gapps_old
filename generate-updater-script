@@ -12,10 +12,6 @@ fi
 DELETES=`sed "/^[^#]/p;d" < $DELETED_FILES | awk '{printf("delete(\"%s\");\n", $0); }' `
 
 cat <<EOF
-ui_print("***********************************************");
-ui_print("        Google Apps for Android $VERSION+");
-ui_print("***********************************************");
-
 ui_print("Mounting /system...");
 run_program("/sbin/busybox", "mount", "/system");
 show_progress(1, 5);
