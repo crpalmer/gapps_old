@@ -14,7 +14,7 @@ all:
 	-rm -rf $(DEST)/system
 	-rm -rf $(DEST)/META-INF
 	cp -r $(SRC)/system $(DEST)
-	cp -r $D/META-INF $(DEST)
+	cp -r $D/$(PLATFORM)/META-INF $(DEST)
 	$(MAKE) $(DEST)/$(PACKAGE)-signed.zip
 
 $(DEST)/$(PACKAGE)-signed.zip: $(DEST)/$(PACKAGE).zip
