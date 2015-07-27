@@ -13,24 +13,29 @@ KEY=testkey.pk8
 $(DEST)/$(PACKAGE)-signed.zip: $(DEST)/$(PACKAGE).zip
 	java -jar signapk.jar $(CERT) $(KEY) $(DEST)/$(PACKAGE).zip $@
 
-$(DEST)/$(PACKAGE).zip: $(DEST)/$(UPDATER_SCRIPT) $(SRC)/proprietary-files $(SRC)/optional-files \
-		$(DEST)/$(BACKUP_SH) $(DEST)/$(G_PROP)
+$(DEST)/$(PACKAGE).zip: $(DEST)/$(UPDATER_SCRIPT) $(DEST)/$(BACKUP_SH) $(DEST)/$(G_PROP) \
+	$(DEST)/proprietary-files
 	mkdir -p `dirname $@`
 	-rm -rf $(DEST)/system
 	cp -r $(SRC)/system $(DEST)/
-	(cd $(DEST) && zip -r $@ META-INF \
-		$(BACKUP_SH) $(OPTIONAL_BACKUP_SH) $(G_PROP)  \
-		`cd $(OUT) && $D/generate-file-list system $(SRC)/proprietary-files`)
+	(cd $(DEST) && zip -r $@ META-INF $(BACKUP_SH))
+	(cd $(SRC) && zip -r $@ `cat $(DEST)/proprietary-files` )
+
+.DUMMY: $(DEST)/proprietary-files.build
+$(DEST)/proprietary-files.build:
+
+$(DEST)/proprietary-files: $(DEST)/proprietary-files.build
+	cd $(SRC) && find system -type f | sed 's@^\./@@' | sort > $@
 
 $(DEST)/$(UPDATER_SCRIPT): generate-updater-script $(SRC)/deleted-files
 	mkdir -p `dirname $@`
 	./generate-updater-script $(VERSION) >$@
 
-$(DEST)/$(BACKUP_SH): $(SRC)/proprietary-files generate-backup-sh
+$(DEST)/$(BACKUP_SH): $(DEST)/proprietary-files generate-backup-sh
 	mkdir -p `dirname $@`
-	./generate-backup-sh $(SRC)/proprietary-files > $@
+	./generate-backup-sh $(DEST)/proprietary-files > $@
 
-.DUMMY: $(G_PROP).build
+.DUMMY: $(DEST)/$(G_PROP).build
 $(DEST)/$(GPROP).build:
 
 $(DEST)/$(G_PROP): $(DEST)/$(GPROP).build
