@@ -10,14 +10,19 @@ G_PROP=system/etc/g.prop
 CERT=testkey.x509.pem
 KEY=testkey.pk8
 
+all:
+	-rm -rf $(DEST)/system
+	-rm -rf $(DEST)/META-INF
+	cp -r $(SRC)/system $(DEST)
+	cp -r $D/META-INF $(DEST)
+	$(MAKE) $(DEST)/$(PACKAGE)-signed.zip
+
 $(DEST)/$(PACKAGE)-signed.zip: $(DEST)/$(PACKAGE).zip
 	java -jar signapk.jar $(CERT) $(KEY) $(DEST)/$(PACKAGE).zip $@
 
 $(DEST)/$(PACKAGE).zip: $(DEST)/$(UPDATER_SCRIPT) $(DEST)/$(BACKUP_SH) $(DEST)/$(G_PROP) \
 	$(DEST)/proprietary-files
 	mkdir -p `dirname $@`
-	-rm -rf $(DEST)/system
-	cp -r $(SRC)/system $(DEST)/
 	(cd $(DEST) && zip -r $@ META-INF $(BACKUP_SH))
 	(cd $(SRC) && zip -r $@ `cat $(DEST)/proprietary-files` )
 
@@ -29,7 +34,7 @@ $(DEST)/proprietary-files: $(DEST)/proprietary-files.build
 
 $(DEST)/$(UPDATER_SCRIPT): generate-updater-script $(SRC)/deleted-files
 	mkdir -p `dirname $@`
-	./generate-updater-script $(VERSION) >$@
+	./generate-updater-script $(VERSION) $(SRC)/deleted-files >$@
 
 $(DEST)/$(BACKUP_SH): $(DEST)/proprietary-files generate-backup-sh
 	mkdir -p `dirname $@`

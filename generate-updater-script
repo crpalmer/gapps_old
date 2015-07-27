@@ -1,15 +1,15 @@
 #!/bin/bash -e
 
 VERSION="$1"
+DELETED_FILES="$2"
 
-if [ "$VERSION" = "" ]
+if [ "$VERSION" = "" -o "$DELETED_FILES" = "" ]
 then
-    echo >&2 "usage: minimum-version"
+    echo >&2 "usage: minimum-version deleted-files"
     exit 1
 fi
 
-DELETES=`sed "/^[^#]/p;d" < deleted-files | \
-	awk '{printf("delete(\"/system/%s\");\n", $0); }' `
+DELETES=`sed "/^[^#]/p;d" < $DELETED_FILES | awk '{printf("delete(\"%s\");\n", $0); }' `
 
 cat <<EOF
 ui_print("***********************************************");
