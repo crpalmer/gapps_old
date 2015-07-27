@@ -12,17 +12,25 @@ fi
 DELETES=`sed "/^[^#]/p;d" < $DELETED_FILES | awk '{printf("delete(\"%s\");\n", $0); }' `
 
 cat <<EOF
+show_progress(1, 15);
+
+ui_print("Unmounting /system (if already mounted)");
+run_program("/sbin/busybox", "umount", "/system");
+
 ui_print("Mounting /system...");
 run_program("/sbin/busybox", "mount", "/system");
-show_progress(1, 5);
+
+show_progress(1, 20);
 ui_print("Deleting old files...");
 $DELETES
-show_progress(1, 10);
+
+show_progress(1, 25);
 ui_print("Installing files...");
 package_extract_dir("system", "/system");
-set_perm(0, 0, 0755, "/system/addon.d/70-gapps.sh");
-show_progress(1, 15);
+
+show_progress(1, 75);
 ui_print("Cleaning up and setting metadata...");
+set_perm(0, 0, 0755, "/system/addon.d/70-gapps.sh");
 set_metadata_recursive("/system/addon.d", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
 set_metadata_recursive("/system/app", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
 set_metadata_recursive("/system/priv-app", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
@@ -34,5 +42,6 @@ set_metadata_recursive("/system/lib", "uid", 0, "gid", 0, "dmode", 0755, "fmode"
 set_metadata_recursive("/system/usr/srec/en-US", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
 set_metadata_recursive("/system/vendor/pittpatt", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
 run_program("/sbin/busybox", "umount", "/system");
+
 ui_print("Installation complete!");
 EOF
