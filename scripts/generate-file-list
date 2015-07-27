@@ -1,4 +1,0 @@
-#!/bin/bash -e
-
-egrep -v '^#' $2 | \
-	sed "s@^@$1/@"
